@@ -3,7 +3,7 @@ class BitView
         @length = mem.byteLength*8
         @intview = new Uint8Array mem
     get:(bitIndex,length)->
-        if !bitIndex? && !length?
+        if !bitIndex? and !length?
             bitIndex = 0
             length = @length
         length = length || 1
@@ -14,7 +14,7 @@ class BitView
             for bit in [0..8]
                 bits[byte*8+bit] = if @intview[byteIndex+byte]&(1<<(7-bit)) then 1 else 0
 
-        bits = bits.slice bitIndex%8, bitIndex%8+length
+        bits = bits[bitIndex%8...bitIndex%8+length]
         if bits.length==1 then bits[0] else bits
     set:(bitIndex,value)->
         byteIndex = Math.floor bitIndex/8
@@ -39,7 +39,7 @@ bitview.set 10,1
 bitview.get 6 #1
 
 #start at bit index 5, get 5 bits
-bitview.get 5,5 #[0,1,0,1,1]
+console.log bitview.get 5,5 #[0,1,0,1,1]
 
 #get all bits
 bitview.get()
