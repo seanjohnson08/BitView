@@ -15,14 +15,17 @@ class BitView
                 bits[byte*8+bit] = if @intview[byteIndex+byte]&(1<<(7-bit)) then 1 else 0
 
         bits = bits.slice bitIndex%8, bitIndex%8+length
-
         if bits.length==1 then bits[0] else bits
     set:(bitIndex,value)->
+        byteIndex = Math.floor bitIndex/8
         value = if value then 1 else 0
-        @intview[Math.floor bitIndex/8] |= value<<(7-bitIndex%8)
+        if value
+            @intview[byteIndex] |= 1<<(7-bitIndex%8)
+        else
+            @intview[byteIndex] &= ~(1<<(7-bitIndex%8))
 
 
-/*USAGE*/
+#USAGE
 
 mem = new ArrayBuffer 10
 bitview = new BitView mem
@@ -32,12 +35,11 @@ bitview.set 8, 1
 bitview.set 9, 1
 bitview.set 10,1
 
-//get single bit
-alert bitview.get 6
+#get single bit
+bitview.get 6 #1
 
-//start at bit index 5, get 5 bits
-alert bitview.get 5,5
+#start at bit index 5, get 5 bits
+bitview.get 5,5 #[0,1,0,1,1]
 
-//get all bits
-console.log bitview.get()
-
+#get all bits
+bitview.get()

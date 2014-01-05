@@ -25,7 +25,12 @@ BitView.prototype.get=function(bitIndex,length){
 };
 BitView.prototype.set=function(bitIndex,value){
   value = value?1:0;
-  this.intview[Math.floor(bitIndex/8)]|=value<<(7-bitIndex%8);
+  var byteIndex = Math.floor(bitIndex/8);
+  if(value) {
+    return this.intview[byteIndex]|=1<<(7-bitIndex%8);
+  } else {
+    return this.intview[byteIndex]&=~(1<<(7-bitIndex%8));
+  }
 };
 
 /*USAGE*/
