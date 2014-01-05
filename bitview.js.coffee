@@ -2,7 +2,7 @@ class BitView
     constructor:(mem)->
         @length = mem.byteLength*8
         @intview = new Uint8Array mem
-    get:(bitIndex,length)->
+    get:(bitIndex, length)->
         if !bitIndex? and !length?
             bitIndex = 0
             length = @length
@@ -16,13 +16,13 @@ class BitView
 
         bits = bits[bitIndex%8...bitIndex%8+length]
         if bits.length==1 then bits[0] else bits
-    set:(bitIndex,value)->
+    set:(bitIndex, value)->
         byteIndex = Math.floor bitIndex/8
-        value = if value then 1 else 0
+        mask = 1<<(7-bitIndex%8)
         if value
-            @intview[byteIndex] |= 1<<(7-bitIndex%8)
+            @intview[byteIndex] |= 
         else
-            @intview[byteIndex] &= ~(1<<(7-bitIndex%8))
+            @intview[byteIndex] &= ~mask
 
 
 #USAGE

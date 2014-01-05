@@ -4,32 +4,32 @@ function BitView(mem){
 }
 BitView.prototype.get=function(bitIndex,length){
   if(bitIndex === undefined && length === undefined) {
-    bitIndex=0;
-    length=this.length;
+    bitIndex = 0;
+    length = this.length;
   }
   length = length || 1;
   var byteIndex = Math.floor(bitIndex/8),
       bit,
       bits=[];
   
-  for(byte=0;byte<=Math.ceil(length/8);byte++) {
-    for(bit=0;bit<8;bit++) {
+  for(byte = 0; byte <= Math.ceil(length/8); byte++) {
+    for(bit = 0; bit < 8; bit++) {
       bits[byte*8+bit]=
-        this.intview[byteIndex+byte]&(1<<(7-bit))?1:0;
+        this.intview[byteIndex+byte] & (1 << (7 - bit))? 1 : 0;
     }
   }
   
-  bits=bits.slice(bitIndex%8,bitIndex%8+length);
+  bits = bits.slice(bitIndex%8, bitIndex%8+length);
 
-  return bits.length==1?bits[0]:bits;
+  return bits.length==1 ? bits[0] : bits;
 };
-BitView.prototype.set=function(bitIndex,value){
-  value = value?1:0;
+BitView.prototype.set = function(bitIndex,value){
   var byteIndex = Math.floor(bitIndex/8);
+  var mask = 1 << (7 - bitIndex % 8);
   if(value) {
-    return this.intview[byteIndex]|=1<<(7-bitIndex%8);
+    return this.intview[byteIndex] |= mask;
   } else {
-    return this.intview[byteIndex]&=~(1<<(7-bitIndex%8));
+    return this.intview[byteIndex] &= ~mask;
   }
 };
 
