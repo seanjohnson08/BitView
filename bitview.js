@@ -1,35 +1,25 @@
 function BitView(mem){
   this.length = mem.byteLength*8;
-  this.intview = new Uint8Array(mem);
+  this.bytes = new Uint8Array(mem);
 }
-BitView.prototype.get=function(bitIndex,length){
-  if(bitIndex === undefined && length === undefined) {
-    bitIndex = 0;
-    length = this.length;
+BitView.prototype.get=function(bitIndex){
+  return this.bytes[Math.floor(bitIndex/8)] & (1 << (7 - bitIndex%8))? 1 : 0;
+};
+BitView.prototype.slice=function(start,end){
+  var i,bits=[];
+  end=end||this.length;
+  for(i=start||0;i<end;i++) {
+    bits.push(this.get(i));
   }
-  length = length || 1;
-  var byteIndex = Math.floor(bitIndex/8),
-      bit,
-      bits=[];
-  
-  for(byte = 0; byte <= Math.ceil(length/8); byte++) {
-    for(bit = 0; bit < 8; bit++) {
-      bits[byte*8+bit]=
-        this.intview[byteIndex+byte] & (1 << (7 - bit))? 1 : 0;
-    }
-  }
-  
-  bits = bits.slice(bitIndex%8, bitIndex%8+length);
-
-  return bits.length==1 ? bits[0] : bits;
+  return bits;
 };
 BitView.prototype.set = function(bitIndex,value){
   var byteIndex = Math.floor(bitIndex/8);
   var mask = 1 << (7 - bitIndex % 8);
   if(value) {
-    return this.intview[byteIndex] |= mask;
+    this.bytes[byteIndex] |= mask;
   } else {
-    return this.intview[byteIndex] &= ~mask;
+    this.bytes[byteIndex] &= ~mask;
   }
 };
 
@@ -48,7 +38,7 @@ bitview.set(6,1);
 console.log(bitview.get(6)); //1
 
 //start at bit index 5, get 5 bits
-console.log(bitview.get(5,5)); //[0','1','0','1','1']
+console.log(bitview.slice(5,10)); //[0','1','0','1','1']
 
 //get all bits
-console.log(bitview.get());
+console.log(bitview.slice());
