@@ -7,9 +7,9 @@ class BitView
     slice:(start,end)->
         bits = []
         start = start||0
-        end = end||this.length
+        end = end||@length
         for i in [start...end]
-            bits.push(this.get(i))
+            bits.push(@get(i))
         bits
     set:(bitIndex, value)->
         byteIndex = Math.floor bitIndex/8
