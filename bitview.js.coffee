@@ -3,7 +3,7 @@ class BitView
         @length = mem.byteLength*8
         @bytes = new Uint8Array mem
     get:(bitIndex)->
-        if this.bytes[Math.floor(bitIndex/8)] & (1 << (7 - bitIndex%8)) then 1 else 0
+        if this.bytes[Math.floor(bitIndex/8)] & (128 >> bitIndex%8) then 1 else 0
     slice:(start,end)->
         bits = []
         start = start||0
@@ -13,7 +13,7 @@ class BitView
         bits
     set:(bitIndex, value)->
         byteIndex = Math.floor bitIndex/8
-        mask = 1<<(7-bitIndex%8)
+        mask = 128 >> bitIndex%8
         if value
             @bytes[byteIndex] |= mask
         else

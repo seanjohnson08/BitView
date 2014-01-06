@@ -3,7 +3,7 @@ function BitView(mem){
   this.bytes = new Uint8Array(mem);
 }
 BitView.prototype.get=function(bitIndex){
-  return this.bytes[Math.floor(bitIndex/8)] & (1 << (7 - bitIndex%8))? 1 : 0;
+  return this.bytes[Math.floor(bitIndex/8)] & (128 >> bitIndex%8)? 1 : 0;
 };
 BitView.prototype.slice=function(start,end){
   var i,bits=[];
@@ -14,8 +14,8 @@ BitView.prototype.slice=function(start,end){
   return bits;
 };
 BitView.prototype.set = function(bitIndex,value){
-  var byteIndex = Math.floor(bitIndex/8);
-  var mask = 1 << (7 - bitIndex % 8);
+  var byteIndex = Math.floor(bitIndex/8),
+      mask = 128 >> bitIndex%8;
   if(value) {
     this.bytes[byteIndex] |= mask;
   } else {
