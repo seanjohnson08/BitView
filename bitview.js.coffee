@@ -5,12 +5,9 @@ class BitView
     get:(bitIndex)->
         if this.bytes[Math.floor(bitIndex/8)] & (128 >> bitIndex%8) then 1 else 0
     slice:(start,end)->
-        bits = []
         start = start||0
         end = end||@length
-        for i in [start...end]
-            bits.push(@get(i))
-        bits
+        bits = @get i for i in [start...end]
     set:(bitIndex, value)->
         byteIndex = Math.floor bitIndex/8
         mask = 128 >> bitIndex%8
