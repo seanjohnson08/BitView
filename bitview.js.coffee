@@ -3,7 +3,7 @@ class BitView
         @length = mem.byteLength*8
         @bytes = new Uint8Array mem
     get:(bitIndex)->
-        if this.bytes[Math.floor bitIndex/8] & (128 >> bitIndex%8) then 1 else 0
+        this.bytes[Math.floor bitIndex/8] & (128 >> bitIndex%8) & 1
     slice:(start,end)->
         start = start||0
         end = end||@length
